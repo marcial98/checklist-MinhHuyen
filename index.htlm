@@ -2,16 +2,17 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Checklist cho Mình Huyền 💖</title>
+<title>Checklist cho Mình Huyền 💖</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      padding: 30px;
+      padding: px;
       background: #e0f7fa;
       color: #333;
     }
     h1 {
       color: #0288d1;
+      font-size: 50px;
     }
     ul {
       list-style: none;
@@ -24,11 +25,11 @@
     }
     input[type="checkbox"] {
       transform: scale(1.4);
-      margin-right: 10px;
+      margin-right: 16px;
     }
     input[type="text"] {
       width: 60%;
-      padding: 8px;
+      padding: 16px;
       border-radius: 5px;
       border: 1px solid #81d4fa;
       margin-right: 10px;
@@ -49,14 +50,16 @@
       color: #888;
     }
     p {
-      color: #ffffff; background: #4169e1;
-      padding: 15px;
+      color: #ffffff;
+      background: #4169e1;
+      padding: 30px;
       border-radius: 10px;
       border-left: 5px solid #4fc3f7;
+      font-size: 30px;
     }
     li span {
-    font-size: 18px;
-  }
+      font-size: 27px;
+    }
 </style>
 </head>
 <body>
