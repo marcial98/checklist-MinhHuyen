@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-   <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <title>Checklist cho Mình Huyền 💖</title>
   <style>
     body {
@@ -59,12 +59,49 @@
     }
     li span {
       font-size: 27px;
+      font-family: 'Segoe UI', sans-serif;
     }
   input[type="checkbox"]:checked + span {
       text-decoration: line-through;
       color: #888;
     }
+  input[type="date"] {
+    border: 2px solid #4fc3f7;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 18px;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #ffffff;
+    color: #333;
+    outline: none;
+    margin-bottom: 30px;
+  }
+  input[type="date"]:hover {
+    border-color: #29b6f6;
+  }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr">  flatpickr(dateInput, {
+    dateFormat: "Y-m-d",
+    defaultDate: "today",
+    locale: "vn"
+  });
+  function updateFinalMessage() {
+    const checkboxes = checklistItems;
+    const excludeIndexes = [3, 6]; // exclude 'chìa khóa' and final message
+    const relevant = checkboxes.filter((_, i) => !excludeIndexes.includes(i));
+    const allChecked = relevant.every(cb => cb.checked);
+    finalMessage.style.display = allChecked ? 'list-item' : 'none';
+  }
+
+  checklistItems.forEach((cb, index) => {
+    if (index !== 6) {
+      cb.addEventListener('change', updateFinalMessage);
+    }
+  });
+
+  updateFinalMessage();
+</script>
 </head>
 <body>
 
@@ -76,6 +113,7 @@
   Mình được tạo ra để giúp bạn kiểm tra lại mọi thứ trước khi ra về, cho yên tâm và đỡ sót việc nhé.<br>
   Cứ tick từng dòng một, nhẹ nhàng mà hiệu quả lắm đó 🐼☁️🐻
 </p>
+<br>
 
 <ul id="checklist">
   <li><input type="checkbox"> <span>Bạn làm kết ca chưa?</span></li>
@@ -84,8 +122,51 @@
   <li><input type="checkbox"> <span>Nhớ cầm theo chìa khóa cửa hàng nha (chỉ cần nếu mai bạn làm sáng thui)</span></li>
   <li><input type="checkbox"> <span>Khóa hết các tủ cửa chưa nè?</span></li>
   <li><input type="checkbox"> <span>Đóng cửa cuốn rồi chứ?</span></li>
-  <li><input type="checkbox"> <span>Oke hết rồi phải hem, đi dìa với mình hoi nào ❤️</span></li>
+  <li id="final-message"><input type="checkbox" disabled checked style="display:none;"> <span>Oke hết rồi phải hem, đi dìa với mình hoi nào ❤️</span></li>
 </ul>
+
+<script>
+  const checklistItems = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]'));
+  const finalMessage = document.getElementById('final-message');
+  const checklistKeyPrefix = 'checklist-huyen-';
+
+  // Create date input
+  const dateInput = document.createElement('input');
+  dateInput.type = 'date';
+  dateInput.style = 'margin-top: 30px; padding: 10px; font-size: 18px;';
+  const label = document.createElement('div');
+const weekdayNames = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+const now = new Date();
+const weekday = weekdayNames[now.getDay()];
+const formattedDate = `${weekday}, ${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+label.textContent = `Hôm nay là: ${formattedDate}`;
+label.style = 'font-size: 27px; margin-bottom: 10px; font-weight: normal; font-family: Segoe UI, sans-serif;';
+document.body.insertBefore(label, document.getElementById('checklist'));
+document.body.insertBefore(dateInput, document.getElementById('checklist'));
+
+  // Load checklist for selected date
+  dateInput.addEventListener('change', () => {
+    const dateKey = checklistKeyPrefix + dateInput.value;
+    const saved = JSON.parse(localStorage.getItem(dateKey) || '[]');
+    checklistItems.forEach((checkbox, i) => {
+      checkbox.checked = !!saved[i];
+    });
+  });
+
+  // Save on check/uncheck
+  checklistItems.forEach((checkbox, i) => {
+    checkbox.addEventListener('change', () => {
+      const dateKey = checklistKeyPrefix + dateInput.value;
+      const current = Array.from(checklistItems).map(cb => cb.checked);
+      localStorage.setItem(dateKey, JSON.stringify(current));
+    });
+  });
+
+  // Set default date to today
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.value = today;
+  dateInput.dispatchEvent(new Event('change'));
+</script>
 
 </body>
 </html>
